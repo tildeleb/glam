@@ -117,11 +117,25 @@ func (a *Vec4) Divide(s float32) {
 	a.W /= s
 }
 
+// `Cross` returns the cross product of `a` and `b`.
+func (a Vec4) Cross(b Vec4) Vec4 {
+	return Vec4{
+		a.Y*b.Z - a.Z*b.Y,
+		a.Z*b.X - a.X*b.Z,
+		a.X*b.Y - a.Y*b.X,
+		a.W,
+	}
+}
+
 //------------------------------------------------------------------------------
 
 // `Dot` returns the dot product of `a` and `b`.
 func (a Vec4) Dot(b Vec4) float32 {
 	return a.X*b.X + a.Y*b.Y + a.Z*b.Z + a.W*b.W
+}
+
+func (a Vec4) Dot3(b Vec4) float32 {
+	return a.X*b.X + a.Y*b.Y + a.Z*b.Z
 }
 
 //------------------------------------------------------------------------------

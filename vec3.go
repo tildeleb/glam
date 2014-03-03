@@ -169,3 +169,63 @@ func (a *Vec3) Normalize() {
 }
 
 //------------------------------------------------------------------------------
+
+func (v Vec3) RotateX(angle float32) (Vec3) {
+	if angle == 0.0 {
+		return v
+	}
+
+	c := math.Cos(angle) // M_PI*angle/180
+	s := math.Sin(angle) // M_PI*angle/180
+	return Vec3{v.X, v.Y*c - v.Z*s, v.Y*s + v.Z*c}
+}
+
+
+func (v Vec3) RotateY(angle float32) (Vec3) {
+	if angle == 0.0 {
+		return v
+	}
+
+	c := math.Cos(angle) // M_PI*angle/180
+	s := math.Sin(angle) // M_PI*angle/180
+	return Vec3{v.X*c + v.Z*s, v.Y, -v.X*s + v.Z*c}
+}
+
+func (v Vec3) RotateZ(angle float32) (Vec3) {
+	if angle == 0.0 {
+		return v
+	}
+
+	c := math.Cos(angle) // M_PI*angle/180
+	s := math.Sin(angle) // M_PI*angle/180
+	return Vec3{v.X*c - v.Y*s, v.X*s + v.Y*c, v.Z}
+}
+
+
+func (v Vec3) RotateAxis(axis Vec3, angle float32) (Vec3) {
+	var rm0, rm1, rm2 Vec3
+
+	if angle == 0.0 {
+		return v
+	}
+
+	c := math.Cos(angle) // M_PI*angle/180
+	s := math.Sin(angle) // M_PI*angle/180
+	onemc := 1.0 - c
+	u := axis.Normalized()
+
+	rm0.X = (u.X)*(u.X) + c*(1-(u.X)*(u.X))
+	rm0.Y = (u.X)*(u.Y)*(onemc) - s*u.Z
+	rm0.Z = (u.X)*(u.Z)*(onemc) + s*u.Z
+
+	rm1.X = (u.X)*(u.X)*(onemc) + s*u.Z
+	rm1.Y = (u.Y)*(u.Y) + c*(1-(u.Y)*(u.Y))
+	rm1.Z = (u.Y)*(u.Z)*(onemc) - s*u.X
+	
+	rm2.X = (u.X)*(u.Z)*(onemc) - s*u.Y
+	rm2.Y = (u.Y)*(u.Z)*(c) + s*u.X
+	rm2.Z = (u.Z)*(u.Z) + c*(1-(u.Z)*(u.Z))
+
+	return Vec3{v.Dot(rm0), v.Dot(rm1), v.Dot(rm2)}
+}
+
